@@ -3,6 +3,31 @@
 export const ENTERPRISE_DONORS = [
   {
     id: 'donor-1',
+    name: 'ABC Restaurant (Vaishali Nagar)',
+    orgType: 'Fine Dine Restaurant',
+    locationName: 'Vaishali Nagar, Sector 4, Jaipur',
+    lat: 26.9028,
+    lng: 75.7423,
+    gstin: '08BBBBB1111B2Z6',
+    category: 'Cooked Meals',
+    foodItem: 'Cooked Rice + Dal Makhani & Fresh Rotis',
+    quantityKg: 30,
+    mealsEquivalent: 75,
+    preparedAt: '1.5 hours ago',
+    safeHoursRemaining: 3.0,
+    holdingTempC: 64, // Hot holding >60C (HACCP verified)
+    dietary: 'Pure Veg',
+    allergens: ['Dairy'],
+    urgency: 'HIGH',
+    status: 'SURPLUS_AVAILABLE',
+    contactPerson: 'Manager Rakesh Gupta',
+    contact: '+91 98290 44556',
+    tag: 'RESTAURANT',
+    certEligible: true,
+    estimatedValueInr: 9000
+  },
+  {
+    id: 'donor-2',
     name: 'The Grand Rajputana Palace Hotel',
     orgType: 'Luxury Hospitality & Banqueting',
     locationName: 'Statue Circle, C-Scheme, Jaipur',
@@ -10,12 +35,12 @@ export const ENTERPRISE_DONORS = [
     lng: 75.8056,
     gstin: '08AAAAA0000A1Z5',
     category: 'Cooked Meals',
-    foodItem: 'Royal Thali Spread: Paneer Lababdar, Dal Makhani & Jeera Pulao',
+    foodItem: 'Royal Thali Spread: Paneer Lababdar & Jeera Pulao',
     quantityKg: 62,
     mealsEquivalent: 155,
     preparedAt: '2 hours ago',
     safeHoursRemaining: 2.5,
-    holdingTempC: 64, // Hot holding >60C (HACCP verified)
+    holdingTempC: 64,
     dietary: 'Pure Veg',
     allergens: ['Dairy'],
     urgency: 'HIGH',
@@ -25,31 +50,6 @@ export const ENTERPRISE_DONORS = [
     tag: 'HOTEL',
     certEligible: true,
     estimatedValueInr: 18600
-  },
-  {
-    id: 'donor-2',
-    name: 'Spice Courtyard Premium Dining',
-    orgType: 'Fine Dine Restaurant',
-    locationName: 'Vaishali Nagar, Sector 4, Jaipur',
-    lat: 26.9028,
-    lng: 75.7423,
-    gstin: '08BBBBB1111B2Z6',
-    category: 'Cooked Meals',
-    foodItem: 'Dum Biryani, Dal Tadka & Fresh Tandoori Rotis',
-    quantityKg: 38,
-    mealsEquivalent: 95,
-    preparedAt: '1.5 hours ago',
-    safeHoursRemaining: 2.8,
-    holdingTempC: 62,
-    dietary: 'Pure Veg',
-    allergens: ['Gluten', 'Dairy'],
-    urgency: 'HIGH',
-    status: 'SURPLUS_AVAILABLE',
-    contactPerson: 'Manager Rakesh Gupta',
-    contact: '+91 98290 44556',
-    tag: 'RESTAURANT',
-    certEligible: true,
-    estimatedValueInr: 11400
   },
   {
     id: 'donor-3',
@@ -131,13 +131,15 @@ export const ENTERPRISE_DONORS = [
 export const ENTERPRISE_SHELTERS = [
   {
     id: 'shelter-1',
-    name: 'Robin Hood Army - Central City Hub',
+    name: 'NGO A (Akshaya Seva Foundation)',
+    alias: 'NGO A',
     regNumber: 'NGO-RAJ-2019-0412',
-    locationName: 'Civil Lines Slum Distribution Center, Jaipur',
+    locationName: 'Civil Lines Distribution Center, Jaipur',
     lat: 26.9080,
-    lng: 75.7890,
-    totalCapacityMeals: 180,
-    currentNeededMeals: 140,
+    lng: 75.7600,
+    totalCapacityMeals: 160,
+    capacityKg: 40,
+    currentNeededMeals: 100, // 40 kg food
     activeBeneficiaries: 135,
     dietaryAccepted: ['Pure Veg', 'Vegetarian', 'Bakery'],
     intakeTimeWindow: '11:00 AM - 11:30 PM',
@@ -149,14 +151,16 @@ export const ENTERPRISE_SHELTERS = [
   },
   {
     id: 'shelter-2',
-    name: 'Asha Orphanage Care & Education Home',
+    name: 'NGO B (Jaipur Care Relief Hub)',
+    alias: 'NGO B',
     regNumber: 'NGO-RAJ-2015-1189',
     locationName: 'Mansarovar, Sector 7, Jaipur',
     lat: 26.8650,
     lng: 75.7680,
-    totalCapacityMeals: 85,
-    currentNeededMeals: 70,
-    activeBeneficiaries: 65,
+    totalCapacityMeals: 50,
+    capacityKg: 10,
+    currentNeededMeals: 25, // 10 kg food
+    activeBeneficiaries: 25,
     dietaryAccepted: ['Pure Veg', 'Bakery', 'Vegetarian'],
     intakeTimeWindow: '08:00 AM - 09:30 PM',
     coldStorageAvailable: false,
@@ -167,20 +171,22 @@ export const ENTERPRISE_SHELTERS = [
   },
   {
     id: 'shelter-3',
-    name: 'Apna Ghar Elder Haven Sanctuary',
+    name: 'NGO C (Mother Teresa Shelter Mission)',
+    alias: 'NGO C',
     regNumber: 'NGO-RAJ-2012-0054',
     locationName: 'Raja Park, Lane 4, Jaipur',
     lat: 26.8920,
-    lng: 75.8280,
-    totalCapacityMeals: 60,
-    currentNeededMeals: 45,
-    activeBeneficiaries: 42,
+    lng: 75.7720,
+    totalCapacityMeals: 180,
+    capacityKg: 50,
+    currentNeededMeals: 125, // 50 kg food
+    activeBeneficiaries: 120,
     dietaryAccepted: ['Pure Veg', 'Soft Cooked Foods'],
     intakeTimeWindow: '10:00 AM - 09:00 PM',
     coldStorageAvailable: true,
     contactPerson: 'Dr. Ramesh Mathur',
     phone: '+91 98294 88776',
-    priority: 'MEDIUM',
+    priority: 'LOW',
     handoverPin: '639102'
   },
   {
@@ -314,49 +320,43 @@ export function computeMatchScores(donor, shelters) {
   return shelters.map(shelter => {
     const distanceKm = Math.max(1.2, calculateHaversineDistanceKm(donor.lat, donor.lng, shelter.lat, shelter.lng));
 
-    // Distance Score: closer is better
-    const distanceScore = Math.max(10, Math.min(100, 100 - (distanceKm * 7)));
+    // 1. Distance Score (40% Weight): Closer is higher score
+    const distanceScore = Math.max(15, Math.min(100, Math.round(100 - (distanceKm * 7.5))));
 
-    // Capacity Match Score
-    const mealsDonated = donor.mealsEquivalent || (donor.quantityKg * 2.5);
-    const needRatio = shelter.currentNeededMeals / mealsDonated;
-    let capacityScore = 0;
-    if (needRatio >= 0.8 && needRatio <= 1.5) {
-      capacityScore = 100;
-    } else if (needRatio > 1.5) {
-      capacityScore = 85;
-    } else {
-      capacityScore = Math.max(20, Math.round(needRatio * 100));
-    }
-
-    // Urgency Factor (Expiry remaining)
-    let urgencyBonus = 50;
-    if (donor.safeHoursRemaining <= 2.0) urgencyBonus = 95;
-    else if (donor.safeHoursRemaining <= 3.5) urgencyBonus = 75;
-
-    // Shelter Need Priority
+    // 2. Shelter Need Score (30% Weight): Based on urgency/priority of hunger need
     const priorityWeights = {
       'VERY_HIGH': 100,
-      'HIGH': 85,
+      'HIGH': 90,
       'MEDIUM': 65,
       'LOW': 40
     };
     const shelterNeedScore = priorityWeights[shelter.priority] || 60;
 
-    // Dietary Compatibility
-    const dietaryMatch = shelter.dietaryAccepted.some(d => 
-      d.toLowerCase().includes(donor.dietary.toLowerCase()) || 
-      donor.dietary.toLowerCase().includes('veg') && d.toLowerCase().includes('veg') ||
-      d.toLowerCase().includes('all')
-    );
-    const dietaryScore = dietaryMatch ? 100 : 25;
+    // 3. Shelter Capacity Match Score (20% Weight): Fit between donation and intake capacity
+    const mealsDonated = donor.mealsEquivalent || (donor.quantityKg * 2.5);
+    const needRatio = shelter.currentNeededMeals / mealsDonated;
+    let capacityScore = 0;
+    if (needRatio >= 0.8 && needRatio <= 1.6) {
+      capacityScore = 100;
+    } else if (needRatio > 1.6) {
+      capacityScore = 85;
+    } else {
+      capacityScore = Math.max(25, Math.round(needRatio * 100));
+    }
 
-    // Weighted Formula: 35% Dist + 30% Capacity + 20% Shelter Need + 15% Dietary & Urgency
+    // 4. Expiry Urgency Score (10% Weight): Perishable safety factor
+    let urgencyScore = 60;
+    if (donor.safeHoursRemaining <= 2.0) urgencyScore = 100;
+    else if (donor.safeHoursRemaining <= 3.5) urgencyScore = 85;
+    else urgencyScore = 65;
+
+    // Weighted Formula from AmiHacks Problem Statement:
+    // Match Score = 40% Distance + 30% Shelter Need + 20% Capacity + 10% Expiry Urgency
     const totalScore = Math.round(
-      (distanceScore * 0.35) +
-      (capacityScore * 0.30) +
-      (shelterNeedScore * 0.20) +
-      ((dietaryScore * 0.6 + urgencyBonus * 0.4) * 0.15)
+      (distanceScore * 0.40) +
+      (shelterNeedScore * 0.30) +
+      (capacityScore * 0.20) +
+      (urgencyScore * 0.10)
     );
 
     return {
@@ -364,19 +364,20 @@ export function computeMatchScores(donor, shelters) {
       shelterName: shelter.name,
       locationName: shelter.locationName,
       distanceKm,
-      distanceScore: Math.round(distanceScore),
-      capacityScore: Math.round(capacityScore),
+      distanceScore,
       shelterNeedScore,
-      dietaryMatch,
+      capacityScore,
+      urgencyScore,
       totalScore,
+      priority: shelter.priority,
       mealsNeeded: shelter.currentNeededMeals,
       mealsOffered: Math.round(mealsDonated),
       handoverPin: shelter.handoverPin,
-      recommendationReason: totalScore > 80 
-        ? 'Optimal Match: High capacity & short transit time'
-        : totalScore > 65 
-        ? 'Strong Alternative: Moderate distance with high demand'
-        : 'Sub-optimal: Lower need or farther travel'
+      recommendationReason: totalScore >= 80 
+        ? 'Rank 1: Best Match (Optimal proximity & high shelter demand)'
+        : totalScore >= 65 
+        ? 'Strong Alternative: Moderate distance with valid capacity'
+        : 'Lower Priority: Farther travel or lower immediate need'
     };
   }).sort((a, b) => b.totalScore - a.totalScore);
 }

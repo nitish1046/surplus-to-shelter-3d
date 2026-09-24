@@ -166,7 +166,7 @@ export default function RescueSimulatorModal({
 
         {/* Algorithm Score Breakdown Table */}
         <div className="saas-card rounded-xl border border-slate-700/60 overflow-hidden flex-1">
-          <div className="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex items-center justify-between">
+          <div className="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-emerald-400" />
               <h3 className="font-bold text-xs uppercase tracking-wider text-slate-200 font-mono">
@@ -174,7 +174,7 @@ export default function RescueSimulatorModal({
               </h3>
             </div>
             <div className="text-[11px] text-slate-400 font-mono">
-              Formula: 35% Distance + 30% Capacity + 20% Need + 15% Urgency/Dietary
+              Formula: <strong>40% Distance + 30% Shelter Need + 20% Capacity + 10% Expiry Urgency</strong>
             </div>
           </div>
 
@@ -185,9 +185,10 @@ export default function RescueSimulatorModal({
                   <th className="py-2.5 px-3">Rank</th>
                   <th className="py-2.5 px-3">Shelter / Recipient Hub</th>
                   <th className="py-2.5 px-3">Dist (Km)</th>
-                  <th className="py-2.5 px-3">Dist Score (35%)</th>
-                  <th className="py-2.5 px-3">Capacity Match (30%)</th>
-                  <th className="py-2.5 px-3">Need Priority (20%)</th>
+                  <th className="py-2.5 px-3">Dist (40%)</th>
+                  <th className="py-2.5 px-3">Need (30%)</th>
+                  <th className="py-2.5 px-3">Capacity (20%)</th>
+                  <th className="py-2.5 px-3">Urgency (10%)</th>
                   <th className="py-2.5 px-3 font-bold text-emerald-400">Total Match Score</th>
                   <th className="py-2.5 px-3">Status</th>
                 </tr>
@@ -216,27 +217,30 @@ export default function RescueSimulatorModal({
                       <td className="py-3 px-3 font-mono text-slate-300">{rank.distanceKm} km</td>
                       <td className="py-3 px-3 font-mono">
                         <div className="flex items-center gap-1.5">
-                          <div className="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                          <div className="w-10 h-1.5 bg-slate-800 rounded-full overflow-hidden">
                             <div className="h-full bg-cyan-400" style={{ width: `${rank.distanceScore}%` }} />
                           </div>
                           <span>{rank.distanceScore}</span>
                         </div>
                       </td>
                       <td className="py-3 px-3 font-mono">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-12 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                            <div className="h-full bg-amber-400" style={{ width: `${rank.capacityScore}%` }} />
-                          </div>
-                          <span>{rank.capacityScore}%</span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-3 font-mono">
                         <span className={`px-1.5 py-0.5 rounded text-[10px] ${
                           rank.shelterNeedScore >= 90 ? 'bg-red-500/20 text-red-300' :
-                          rank.shelterNeedScore >= 75 ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-700 text-slate-300'
+                          rank.shelterNeedScore >= 65 ? 'bg-amber-500/20 text-amber-300' : 'bg-slate-700 text-slate-300'
                         }`}>
-                          {rank.shelterNeedScore}/100
+                          {rank.shelterNeedScore}
                         </span>
+                      </td>
+                      <td className="py-3 px-3 font-mono">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-10 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div className="h-full bg-purple-400" style={{ width: `${rank.capacityScore}%` }} />
+                          </div>
+                          <span>{rank.capacityScore}</span>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 font-mono text-amber-400">
+                        {rank.urgencyScore || 85}
                       </td>
                       <td className="py-3 px-3 font-mono font-bold">
                         <span className={`text-sm ${isTop ? 'text-emerald-400' : 'text-slate-300'}`}>

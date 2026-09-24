@@ -9,6 +9,7 @@ export default function EnterpriseHeader({
   setActiveTab,
   onOpenSimulator,
   onOpenPresentation,
+  onOpenDriverPortal,
   soundEnabled,
   setSoundEnabled,
   timeOfDay,
@@ -111,6 +112,15 @@ export default function EnterpriseHeader({
             <Presentation className="w-4 h-4 text-cyan-200" />
             <span className="hidden sm:inline">3D Pitch Deck</span>
             <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">10 Slides</span>
+          </button>
+
+          <button
+            onClick={onOpenDriverPortal}
+            className="p-2 sm:px-3 sm:py-2 rounded-xl bg-slate-900 border border-teal-500/40 text-teal-400 hover:text-white transition flex items-center gap-1.5 text-xs font-mono"
+            title="Open Driver & Volunteer Terminal"
+          >
+            <Truck className="w-4 h-4 text-teal-400" />
+            <span className="hidden md:inline">Driver HUD</span>
           </button>
 
           <button

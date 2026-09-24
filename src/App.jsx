@@ -15,6 +15,7 @@ import DonorPortalModal from './components/DonorPortalModal';
 import ShelterPortalModal from './components/ShelterPortalModal';
 import TaxCertificateModal from './components/TaxCertificateModal';
 import Presentation3DDeck from './components/Presentation3DDeck';
+import DriverPortalModal from './components/DriverPortalModal';
 
 import { 
   ENTERPRISE_DONORS, ENTERPRISE_SHELTERS, ENTERPRISE_FLEET, 
@@ -53,6 +54,7 @@ export default function App() {
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [isDonorPortalOpen, setIsDonorPortalOpen] = useState(false);
   const [isShelterPortalOpen, setIsShelterPortalOpen] = useState(false);
+  const [isDriverPortalOpen, setIsDriverPortalOpen] = useState(false);
   const [selectedDonorForCert, setSelectedDonorForCert] = useState(null);
   const [isPresentationOpen, setIsPresentationOpen] = useState(false);
 
@@ -60,6 +62,21 @@ export default function App() {
 
   const triggerChime = (type) => {
     if (soundEnabled) playChime(type);
+  };
+
+  const handleRunQuickExample = () => {
+    const donor1 = donors.find(d => d.id === 'donor-1') || donors[0];
+    const shelter1 = shelters.find(s => s.id === 'shelter-1') || shelters[0];
+    if (donor1 && shelter1) {
+      startSimulation(donor1, {
+        shelterId: shelter1.id,
+        shelterName: shelter1.name,
+        distanceKm: 2.1,
+        mealsNeeded: shelter1.currentNeededMeals,
+        mealsOffered: donor1.mealsEquivalent || 75,
+        totalScore: 94
+      });
+    }
   };
 
   // Start Real-Time Mission Simulation
@@ -177,6 +194,7 @@ export default function App() {
         setActiveTab={setActiveTab}
         onOpenSimulator={() => setIsSimulatorOpen(true)}
         onOpenPresentation={() => setIsPresentationOpen(true)}
+        onOpenDriverPortal={() => setIsDriverPortalOpen(true)}
         soundEnabled={soundEnabled}
         setSoundEnabled={setSoundEnabled}
         timeOfDay={timeOfDay}
@@ -299,6 +317,8 @@ export default function App() {
               onOpenSimulator={() => setIsSimulatorOpen(true)}
               onOpenDonorPortal={() => setIsDonorPortalOpen(true)}
               onOpenShelterPortal={() => setIsShelterPortalOpen(true)}
+              onOpenDriverPortal={() => setIsDriverPortalOpen(true)}
+              onRunQuickExample={handleRunQuickExample}
               totalRescuedKg={totalRescuedKg}
             />
           )}
@@ -373,6 +393,24 @@ export default function App() {
         isOpen={Boolean(selectedDonorForCert)}
         onClose={() => setSelectedDonorForCert(null)}
         donor={selectedDonorForCert}
+      />
+
+      <DriverPortalModal
+        isOpen={isDriverPortalOpen}
+        onClose={() => setIsDriverPortalOpen(false)}
+        activeMission={activeMission}
+        onCompleteDelivery={(rescuedKg) => {
+          setTotalRescuedKg(prev => prev + rescuedKg);
+          setSimulationState({
+            isRunning: false,
+            step: 'Delivered & Completed',
+            progress: 1,
+            activeMission: null,
+            winningMatch: null
+          });
+        }}
+        donors={donors}
+        shelters={shelters}
       />
 
       <Presentation3DDeck

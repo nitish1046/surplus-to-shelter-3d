@@ -4,6 +4,7 @@ import {
   Leaf, Droplets, Award, Play, Utensils, CheckCircle2, ChevronRight 
 } from 'lucide-react';
 import InteractiveRescueMap from './InteractiveRescueMap';
+import SystemArchitectureFlow from './SystemArchitectureFlow';
 import { calculateImpactMetrics } from '../data/mockData';
 
 export default function OverviewWorkspace({
@@ -17,6 +18,8 @@ export default function OverviewWorkspace({
   onOpenSimulator,
   onOpenDonorPortal,
   onOpenShelterPortal,
+  onOpenDriverPortal,
+  onRunQuickExample,
   totalRescuedKg
 }) {
   const [calcKg, setCalcKg] = useState(120);
@@ -69,6 +72,14 @@ export default function OverviewWorkspace({
               <Users className="w-4 h-4 text-cyan-400" />
               Shelter Intake Hub
             </button>
+
+            <button
+              onClick={onOpenDriverPortal}
+              className="px-5 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-teal-300 border border-teal-500/30 font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition"
+            >
+              <Truck className="w-4 h-4 text-teal-400" />
+              Driver Terminal
+            </button>
           </div>
         </div>
       </section>
@@ -118,6 +129,17 @@ export default function OverviewWorkspace({
           </div>
           <div className="text-[11px] text-slate-500 mt-1 font-mono">Post to recipient delivery</div>
         </div>
+      </section>
+
+      {/* Interactive System Architecture & 4-Pillar Workflow */}
+      <section>
+        <SystemArchitectureFlow
+          onOpenSimulator={onOpenSimulator}
+          onOpenDonorPortal={onOpenDonorPortal}
+          onOpenShelterPortal={onOpenShelterPortal}
+          onOpenDriverPortal={onOpenDriverPortal}
+          onRunQuickExample={onRunQuickExample}
+        />
       </section>
 
       {/* Main Feature: Live Interactive GIS Rescue Map */}
