@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import EnterpriseHeader from './components/EnterpriseHeader';
 import OverviewWorkspace from './components/OverviewWorkspace';
+import City3DCanvas from './components/City3DCanvas';
+import NodeDrawer from './components/NodeDrawer';
 import DonorWorkspace from './components/DonorWorkspace';
 import ShelterWorkspace from './components/ShelterWorkspace';
 import LogisticsWorkspace from './components/LogisticsWorkspace';
@@ -18,15 +20,19 @@ import {
   computeMatchScores, playChime 
 } from './data/mockData';
 import confetti from 'canvas-confetti';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'donor-hub' | 'shelter-hub' | 'logistics-vrp' | 'esg-audit' | 'ai-forecast'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | '3d-twin' | 'donor-hub' | 'shelter-hub' | 'logistics-vrp' | 'esg-audit' | 'ai-forecast'
   const [donors, setDonors] = useState(ENTERPRISE_DONORS);
   const [shelters, setShelters] = useState(ENTERPRISE_SHELTERS);
   const [fleet] = useState(ENTERPRISE_FLEET);
   const [totalRescuedKg, setTotalRescuedKg] = useState(245);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // 3D Viewport Controls
+  const [cameraPreset, setCameraPreset] = useState('OVERVIEW');
+  const [timeOfDay, setTimeOfDay] = useState('NIGHT');
 
   // Active Mission & Simulation State
   const [activeMission, setActiveMission] = useState(null);
@@ -39,7 +45,7 @@ export default function App() {
     winningMatch: null,
   });
 
-  // Selected Node (for inspection on map)
+  // Selected Node (for inspection on map or 3D)
   const [selectedNode, setSelectedNode] = useState(null);
 
   // Modals
@@ -130,7 +136,7 @@ export default function App() {
         );
 
         confetti({
-          particleCount: 120,
+          particleCount: 130,
           spread: 80,
           origin: { y: 0.6 },
         });
@@ -170,6 +176,8 @@ export default function App() {
         onOpenSimulator={() => setIsSimulatorOpen(true)}
         soundEnabled={soundEnabled}
         setSoundEnabled={setSoundEnabled}
+        timeOfDay={timeOfDay}
+        setTimeOfDay={setTimeOfDay}
         totalRescuedKg={totalRescuedKg}
       />
 
@@ -198,76 +206,142 @@ export default function App() {
 
             <div className="text-xs text-slate-300 font-medium flex items-center justify-between">
               <span className="truncate">{simulationState.step}</span>
-              <button
-                onClick={() => setActiveTab('overview')}
-                className="text-[11px] text-emerald-400 hover:underline flex items-center gap-0.5 shrink-0 ml-2 font-mono"
-              >
-                View on Map <ArrowRight className="w-3 h-3" />
-              </button>
+              <div className="flex items-center gap-2 ml-2 shrink-0">
+                <button
+                  onClick={() => setActiveTab('overview')}
+                  className="text-[11px] text-emerald-400 hover:underline flex items-center gap-0.5 font-mono"
+                >
+                  2D Map <ArrowRight className="w-3 h-3" />
+                </button>
+                <button
+                  onClick={() => setActiveTab('3d-twin')}
+                  className="text-[11px] text-cyan-400 hover:underline flex items-center gap-0.5 font-mono"
+                >
+                  3D View <ArrowUpRight className="w-3 h-3" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* 3. Main Workspace View */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-6">
-        {activeTab === 'overview' && (
-          <OverviewWorkspace
+      {activeTab === '3d-twin' ? (
+        <div className="relative w-full h-[calc(100vh-84px)] overflow-hidden">
+          <City3DCanvas
             donors={donors}
             shelters={shelters}
-            fleet={fleet}
             activeMission={activeMission}
-            missionProgress={missionProgress}
             selectedNode={selectedNode}
-            onSelectNode={(node) => setSelectedNode(node)}
-            onOpenSimulator={() => setIsSimulatorOpen(true)}
-            onOpenDonorPortal={() => setIsDonorPortalOpen(true)}
-            onOpenShelterPortal={() => setIsShelterPortalOpen(true)}
-            totalRescuedKg={totalRescuedKg}
-          />
-        )}
-
-        {activeTab === 'donor-hub' && (
-          <DonorWorkspace
-            donors={donors}
-            onOpenNewBatchModal={() => setIsDonorPortalOpen(true)}
-            onOpenCertificateModal={(donor) => setSelectedDonorForCert(donor)}
-            onSelectDonorForRescue={handleSelectDonorFromTable}
-          />
-        )}
-
-        {activeTab === 'shelter-hub' && (
-          <ShelterWorkspace
-            shelters={shelters}
-            onUpdateShelterNeed={handleUpdateShelterNeed}
-          />
-        )}
-
-        {activeTab === 'logistics-vrp' && (
-          <LogisticsWorkspace
-            onTriggerRescueMission={() => {
-              const d1 = donors[0];
-              const s1 = shelters[0];
-              if (d1 && s1) {
-                startSimulation(d1, {
-                  shelterId: s1.id,
-                  shelterName: s1.name,
-                  distanceKm: 2.1,
-                });
-              }
+            onSelectNode={(node) => {
+              setSelectedNode(node);
+              setCameraPreset('FOCUS_DONOR');
             }}
-            simulationState={simulationState}
+            cameraPreset={cameraPreset}
+            timeOfDay={timeOfDay}
+            missionProgress={missionProgress}
+            isSimulating={simulationState.isRunning}
           />
-        )}
 
-        {activeTab === 'esg-audit' && (
-          <ESGComplianceWorkspace totalRescuedKg={totalRescuedKg} />
-        )}
+          {/* 3D Camera Controls */}
+          <div className="absolute top-4 right-4 z-20 pointer-events-auto">
+            <div className="glass-panel px-3 py-1.5 rounded-xl border border-slate-700/60 shadow-xl flex items-center gap-1.5 text-xs font-mono">
+              <button
+                onClick={() => setCameraPreset('OVERVIEW')}
+                className={`px-2.5 py-1 rounded-lg transition ${
+                  cameraPreset === 'OVERVIEW' ? 'bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Orbit 3D
+              </button>
+              <button
+                onClick={() => setCameraPreset('FOLLOW_VAN')}
+                className={`px-2.5 py-1 rounded-lg transition ${
+                  cameraPreset === 'FOLLOW_VAN' ? 'bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                Follow Van
+              </button>
+              <button
+                onClick={() => setCameraPreset('TOP_DOWN')}
+                className={`px-2.5 py-1 rounded-lg transition ${
+                  cameraPreset === 'TOP_DOWN' ? 'bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/40' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                2D GIS
+              </button>
+            </div>
+          </div>
 
-        {activeTab === 'ai-forecast' && (
-          <AiForecastWorkspace />
-        )}
-      </main>
+          <NodeDrawer
+            node={selectedNode}
+            onClose={() => setSelectedNode(null)}
+            onDispatchFromNode={(node) => {
+              setSelectedNode(null);
+              setIsSimulatorOpen(true);
+            }}
+          />
+        </div>
+      ) : (
+        <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-6">
+          {activeTab === 'overview' && (
+            <OverviewWorkspace
+              donors={donors}
+              shelters={shelters}
+              fleet={fleet}
+              activeMission={activeMission}
+              missionProgress={missionProgress}
+              selectedNode={selectedNode}
+              onSelectNode={(node) => setSelectedNode(node)}
+              onOpenSimulator={() => setIsSimulatorOpen(true)}
+              onOpenDonorPortal={() => setIsDonorPortalOpen(true)}
+              onOpenShelterPortal={() => setIsShelterPortalOpen(true)}
+              totalRescuedKg={totalRescuedKg}
+            />
+          )}
+
+          {activeTab === 'donor-hub' && (
+            <DonorWorkspace
+              donors={donors}
+              onOpenNewBatchModal={() => setIsDonorPortalOpen(true)}
+              onOpenCertificateModal={(donor) => setSelectedDonorForCert(donor)}
+              onSelectDonorForRescue={handleSelectDonorFromTable}
+            />
+          )}
+
+          {activeTab === 'shelter-hub' && (
+            <ShelterWorkspace
+              shelters={shelters}
+              onUpdateShelterNeed={handleUpdateShelterNeed}
+            />
+          )}
+
+          {activeTab === 'logistics-vrp' && (
+            <LogisticsWorkspace
+              onTriggerRescueMission={() => {
+                const d1 = donors[0];
+                const s1 = shelters[0];
+                if (d1 && s1) {
+                  startSimulation(d1, {
+                    shelterId: s1.id,
+                    shelterName: s1.name,
+                    distanceKm: 2.1,
+                  });
+                }
+              }}
+              simulationState={simulationState}
+            />
+          )}
+
+          {activeTab === 'esg-audit' && (
+            <ESGComplianceWorkspace totalRescuedKg={totalRescuedKg} />
+          )}
+
+          {activeTab === 'ai-forecast' && (
+            <AiForecastWorkspace />
+          )}
+        </main>
+      )}
 
       {/* 4. Global Modals */}
       <RescueSimulatorModal
@@ -299,12 +373,14 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="w-full border-t border-slate-800/80 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500 font-mono">
-        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-2">
-          <span>Surplus-to-Shelter PRO • AmiHacks Problem Statement 1</span>
-          <span>Aligned with UN SDG 2 (Zero Hunger) & SDG 12.3 (Halve Food Waste)</span>
-        </div>
-      </footer>
+      {activeTab !== '3d-twin' && (
+        <footer className="w-full border-t border-slate-800/80 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500 font-mono">
+          <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-2">
+            <span>Surplus-to-Shelter PRO • AmiHacks Problem Statement 1</span>
+            <span>Aligned with UN SDG 2 (Zero Hunger) & SDG 12.3 (Halve Food Waste)</span>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }

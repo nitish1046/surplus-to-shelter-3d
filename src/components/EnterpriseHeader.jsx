@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Building2, Home, Truck, BarChart3, TrendingUp, Globe2, 
-  Sparkles, Sun, Moon, Volume2, VolumeX, Play, MapPin 
+  Sparkles, Box, Volume2, VolumeX, Play, Sun, Moon 
 } from 'lucide-react';
 
 export default function EnterpriseHeader({
@@ -10,10 +10,13 @@ export default function EnterpriseHeader({
   onOpenSimulator,
   soundEnabled,
   setSoundEnabled,
+  timeOfDay,
+  setTimeOfDay,
   totalRescuedKg
 }) {
   const tabs = [
     { id: 'overview', label: 'Mission Overview', icon: Globe2 },
+    { id: '3d-twin', label: '3D Digital Twin', icon: Box, badge: 'Three.js' },
     { id: 'donor-hub', label: 'Commercial Donors', icon: Building2, badge: 'HACCP' },
     { id: 'shelter-hub', label: 'Shelter Operations', icon: Home, badge: 'Intake' },
     { id: 'logistics-vrp', label: 'Fleet & VRP Logistics', icon: Truck, badge: '50% Saved' },
@@ -97,7 +100,7 @@ export default function EnterpriseHeader({
           })}
         </nav>
 
-        {/* Action Controls (Right) */}
+        {/* Action Controls */}
         <div className="flex items-center gap-2">
           <button
             onClick={onOpenSimulator}
@@ -114,6 +117,16 @@ export default function EnterpriseHeader({
           >
             {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4" />}
           </button>
+
+          {activeTab === '3d-twin' && (
+            <button
+              onClick={() => setTimeOfDay(timeOfDay === 'NIGHT' ? 'SUNSET' : timeOfDay === 'SUNSET' ? 'DAY' : 'NIGHT')}
+              title="Toggle Day / Sunset / Night Lighting"
+              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition"
+            >
+              {timeOfDay === 'NIGHT' ? <Moon className="w-4 h-4 text-cyan-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+            </button>
+          )}
         </div>
       </div>
     </header>
