@@ -14,6 +14,7 @@ import RescueSimulatorModal from './components/RescueSimulatorModal';
 import DonorPortalModal from './components/DonorPortalModal';
 import ShelterPortalModal from './components/ShelterPortalModal';
 import TaxCertificateModal from './components/TaxCertificateModal';
+import Presentation3DDeck from './components/Presentation3DDeck';
 
 import { 
   ENTERPRISE_DONORS, ENTERPRISE_SHELTERS, ENTERPRISE_FLEET, 
@@ -53,6 +54,7 @@ export default function App() {
   const [isDonorPortalOpen, setIsDonorPortalOpen] = useState(false);
   const [isShelterPortalOpen, setIsShelterPortalOpen] = useState(false);
   const [selectedDonorForCert, setSelectedDonorForCert] = useState(null);
+  const [isPresentationOpen, setIsPresentationOpen] = useState(false);
 
   const missionIntervalRef = useRef(null);
 
@@ -174,6 +176,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSimulator={() => setIsSimulatorOpen(true)}
+        onOpenPresentation={() => setIsPresentationOpen(true)}
         soundEnabled={soundEnabled}
         setSoundEnabled={setSoundEnabled}
         timeOfDay={timeOfDay}
@@ -370,6 +373,13 @@ export default function App() {
         isOpen={Boolean(selectedDonorForCert)}
         onClose={() => setSelectedDonorForCert(null)}
         donor={selectedDonorForCert}
+      />
+
+      <Presentation3DDeck
+        isOpen={isPresentationOpen}
+        onClose={() => setIsPresentationOpen(false)}
+        donors={donors}
+        shelters={shelters}
       />
 
       {/* Footer */}

@@ -1,13 +1,14 @@
 import React from 'react';
 import { 
   Building2, Home, Truck, BarChart3, TrendingUp, Globe2, 
-  Sparkles, Box, Volume2, VolumeX, Play, Sun, Moon 
+  Sparkles, Box, Volume2, VolumeX, Play, Sun, Moon, Presentation 
 } from 'lucide-react';
 
 export default function EnterpriseHeader({
   activeTab,
   setActiveTab,
   onOpenSimulator,
+  onOpenPresentation,
   soundEnabled,
   setSoundEnabled,
   timeOfDay,
@@ -102,6 +103,16 @@ export default function EnterpriseHeader({
 
         {/* Action Controls */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={onOpenPresentation}
+            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-cyan-500/20 transition hover:scale-105"
+            title="Launch 10-Slide Pitch Deck with 3D City Simulation & PPTX Download"
+          >
+            <Presentation className="w-4 h-4 text-cyan-200" />
+            <span className="hidden sm:inline">3D Pitch Deck</span>
+            <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">10 Slides</span>
+          </button>
+
           <button
             onClick={onOpenSimulator}
             className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition hover:scale-105"
